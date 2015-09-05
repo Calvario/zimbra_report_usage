@@ -45,7 +45,7 @@ mkdir /opt/zimbra/scripts
 Copy the script downloaded in this folder.
 Change the owner and the rights of the script file.
 ```
-chown zimbra:zimbra /opt/zimbra/scripts/zimbra_report_usage.sh
+chown zimbra:zimbra /opt/zimbra/scripts -R
 chmod 755 /opt/zimbra/scripts/zimbra_report_usage.sh
 ```
 Create a cron job for the script.
