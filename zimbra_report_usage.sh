@@ -40,6 +40,7 @@ mail_send_to='name@domain.tld'
 
 zimbra_sendmail='/opt/zimbra/postfix/sbin/sendmail'
 
+script_log='zimbra_report_usage.log'
 # ----------------------------------------------------------------------------------------
 
 
@@ -56,13 +57,13 @@ if [ $(whoami) != "zimbra" ]
 then
 	error="This script must be executed with the zimbra account"
 	echo $error
-	echo "$(date '+%Y-%m-%d %H:%M:%S') - Error : $error" >> error.log
+	echo "$(date '+%Y-%m-%d %H:%M:%S') - Error : $error" >> $script_log
 	exit 1
 elif ! type zmcontrol > /dev/null
 then
 	error="Apparently Zimbra is not installed"
 	echo $error
-	echo "$(date '+%Y-%m-%d %H:%M:%S') - Error : $error" >> error.log
+	echo "$(date '+%Y-%m-%d %H:%M:%S') - Error : $error" >> $script_log
 	exit 1
 elif ! type flock > /dev/null
 then
