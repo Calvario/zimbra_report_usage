@@ -23,12 +23,12 @@ This script will make a report of :
 - Disk usage
 - Backup folder size
 
-It will send you a mail notification.
+It will send you a email notification.
 
 # Notes
 
 - You need to have Zimbra Collaboration Network Edition to use this script
-- The mail notification will use the local zimbra server to send the mail
+- The email notification will use the local zimbra server to send the email
 - Do not forget to change the values in script !
 - Use , to have more than one recipient. Ex : name@domain.tld,name2@domain.tld
 
