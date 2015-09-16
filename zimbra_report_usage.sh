@@ -4,24 +4,8 @@
 # Title		: zimbra_report_usage.sh
 # Author	: Steve Calvário
 # Date		: 2015-09-01
-# Version	: 1.4
+# Version	: 1.5
 # Github	: https://github.com/Calvario/zimbra_report_usage/
-# Description	: This script will make a report of :
-#		: - Zimbra version
-#		: - Hostname
-#		: - Local IP address
-#		: - Server datetime
-#		: - Server uptime
-#		: - Zimbra mailbox usage, quota and status for all accounts
-#		: - Total of Zimbra mailbox usage and quota usage
-#		: - Disk usage
-#		: - Backup folder size
-# Notification	: It will send you a mail notification.
-# Notes		: You need to have Zimbra Collaboration Network Edition to use this script
-#		: The mail notification will use the local zimbra server to send the mail
-#		: Do not forget to change the values below !
-# 		: Use , to have more than one recipient. Ex : name@domain.tld,name2@domain.tld
-# Tested in	: CentOS 7.1.1503 x64, Zimbra Collaboration Network Edition 8.6.0
 # ----------------------------------------------------------------------------------------
 
 
@@ -74,15 +58,37 @@ then
 	echo $error
 	echo "$(date '+%Y-%m-%d %H:%M:%S') - Error : $error" >> error.log
 	exit 1
-elif [ ! -f /opt/zimbra/bin/zmcontrol ]
+elif ! type zmcontrol > /dev/null
 then
 	error="Apparently Zimbra is not installed"
 	echo $error
 	echo "$(date '+%Y-%m-%d %H:%M:%S') - Error : $error" >> error.log
 	exit 1
-else
-	echo "The environment is correct, script is starting now"
+elif ! type flock > /dev/null
+then
+	error="flock is required to use this script, please install it."
+	echo $error
+	
+	echo "$(date '+%Y-%m-%d %H:%M:%S') - Error : $error" >> $script_log
+	exit 1
 fi
+
+# ----------------------------------------------------------------------------------------
+
+
+# ----------------------------------------------------------------------------------------
+# Create lock file 
+# ----------------------------------------------------------------------------------------
+
+set -e
+
+script_name="zimbra_report_usage.lock"
+
+exec 200>$script_name
+flock -n 200 || exit 1
+
+script_pid=$$
+echo $script_pid 1>&200
 
 # ----------------------------------------------------------------------------------------
 
@@ -228,5 +234,4 @@ From: $mail_send_from
 
 echo -e $mail_message | $zimbra_sendmail $mail_send_to
 
-exit 0
 # ----------------------------------------------------------------------------------------
