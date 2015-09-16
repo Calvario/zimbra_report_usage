@@ -3,7 +3,7 @@
 # ----------------------------------------------------------------------------------------
 # Title		: zimbra_report_usage.sh
 # Author	: Steve Calvário
-# Date		: 2015-09-01
+# Date		: 2015-09-16
 # Version	: 1.5
 # Github	: https://github.com/Calvario/zimbra_report_usage/
 # ----------------------------------------------------------------------------------------
@@ -41,6 +41,10 @@ mail_send_to='name@domain.tld'
 zimbra_sendmail='/opt/zimbra/postfix/sbin/sendmail'
 
 script_log='zimbra_report_usage.log'
+script_lock='zimbra_report_usage.lock'
+
+PATH=/opt/zimbra/bin:/usr/sbin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+
 # ----------------------------------------------------------------------------------------
 
 
@@ -83,9 +87,7 @@ fi
 
 set -e
 
-script_name="zimbra_report_usage.lock"
-
-exec 200>$script_name
+exec 200>$script_lock
 flock -n 200 || exit 1
 
 script_pid=$$
